@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GitHubApiClient.Services;
 using GitHubApiClient.DTOs;
+using GitHubApiClient.Exceptions;
 
 namespace GitHubApiClient.Controllers
 {
@@ -18,12 +19,15 @@ namespace GitHubApiClient.Controllers
         [Route("me")]
         public async Task<ActionResult<GitHubUserDTO>> GetProfileAsync()
         {
-            var profile = await _githubService.GetAuthenticatedUserAsync();
-            if (profile == null)
+            try 
             {
-                return StatusCode(500, "Failed to retrieve GitHub profile.");
+                var profile = await _githubService.GetAuthenticatedUserAsync();
+                return Ok(profile);
             }
-            return Ok(profile);
+            catch (UnauthorizedException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
 
         }
 
