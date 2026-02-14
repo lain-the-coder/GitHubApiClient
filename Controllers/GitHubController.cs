@@ -28,8 +28,10 @@ namespace GitHubApiClient.Controllers
             {
                 return Unauthorized(ex.Message);
             }
-
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(503, "Unable to connect to GitHub. Please try again later.");
+            }
         }
-
     }
 }
