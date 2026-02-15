@@ -3,7 +3,7 @@ using GitHubApiClient.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpClient<GitHubService>();
+builder.Services.AddHttpClient<IGitHubService, GitHubService>();
 builder.Services.Configure<GitHubSettings>(builder.Configuration.GetSection("GitHub"));
 
 builder.Services.AddControllers();

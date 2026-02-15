@@ -10,7 +10,7 @@ using GitHubApiClient.Exceptions;
 
 namespace GitHubApiClient.Services
 {
-    public class GitHubService
+    public class GitHubService : IGitHubService
     {
         private readonly HttpClient _httpClient;
         private readonly GitHubSettings _settings;

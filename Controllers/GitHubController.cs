@@ -10,8 +10,8 @@ namespace GitHubApiClient.Controllers
     [ApiController]
     public class GitHubController : ControllerBase
     {
-        private readonly GitHubService _githubService;
-        public GitHubController(GitHubService githubService)
+        private readonly IGitHubService _githubService;
+        public GitHubController(IGitHubService githubService)
         {
             _githubService = githubService;
         }
