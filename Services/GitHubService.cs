@@ -38,7 +38,12 @@ namespace GitHubApiClient.Services
 
             var result = await response.Content.ReadFromJsonAsync<GitHubUserDTO>();
 
-            return result!;
+            if (result == null)
+            {
+                throw new InvalidOperationException("GitHub returned empty response.");
+            }
+
+            return result;
         }
     }
 }

@@ -2,6 +2,7 @@
 using GitHubApiClient.Services;
 using GitHubApiClient.DTOs;
 using GitHubApiClient.Exceptions;
+using System.Text.Json;
 
 namespace GitHubApiClient.Controllers
 {
@@ -19,7 +20,7 @@ namespace GitHubApiClient.Controllers
         [Route("me")]
         public async Task<ActionResult<GitHubUserDTO>> GetProfileAsync()
         {
-            try 
+            try
             {
                 var profile = await _githubService.GetAuthenticatedUserAsync();
                 return Ok(profile);
@@ -28,7 +29,15 @@ namespace GitHubApiClient.Controllers
             {
                 return Unauthorized(ex.Message);
             }
-            catch (HttpRequestException ex)
+            catch (JsonException)
+            {
+                return StatusCode(502, "Received invalid response from GitHub.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(502, ex.Message);
+            }
+            catch (HttpRequestException)
             {
                 return StatusCode(503, "Unable to connect to GitHub. Please try again later.");
             }
