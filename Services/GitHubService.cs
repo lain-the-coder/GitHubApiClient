@@ -36,6 +36,18 @@ namespace GitHubApiClient.Services
                 throw new UnauthorizedException("You are not authorized to make this request.");
             }
 
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                throw new ForbiddenException("Your token does not have the required permissions.");
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(
+                    $"GitHub API error: {response.StatusCode} - {response.ReasonPhrase}"
+                    );
+            }
+
             var result = await response.Content.ReadFromJsonAsync<GitHubUserDTO>();
 
             if (result == null)

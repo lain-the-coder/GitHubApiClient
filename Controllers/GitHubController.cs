@@ -29,6 +29,10 @@ namespace GitHubApiClient.Controllers
             {
                 return Unauthorized(ex.Message);
             }
+            catch (ForbiddenException ex)
+            {
+                return StatusCode(403, ex.Message);
+            }
             catch (JsonException)
             {
                 return StatusCode(502, "Received invalid response from GitHub.");
@@ -37,9 +41,16 @@ namespace GitHubApiClient.Controllers
             {
                 return StatusCode(502, ex.Message);
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
+                Console.WriteLine($"[ERROR] {DateTime.Now}: {ex.Message}");
                 return StatusCode(503, "Unable to connect to GitHub. Please try again later.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] {DateTime.Now}: {ex.GetType().Name} - {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                return StatusCode(500, "An unexpected error occurred. Please try again later.");
             }
         }
     }
